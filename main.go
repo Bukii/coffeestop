@@ -9,10 +9,23 @@ func setupRouter() *gin.Engine {
 	r := gin.Default()
 	r.SetTrustedProxies(nil) // just for getting rid of the warning
 
+	authorized := r.Group("/", gin.BasicAuth(gin.Accounts{
+		"bxkii": "1234",
+		"benji": "1234",
+	}))
+
 	// Test request
-	r.GET("/test", func(c *gin.Context) {
+	r.GET("/", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "testu lulu",
+		})
+	})
+
+	// Login endpoint
+	// TODO: add mongo support
+	authorized.GET("/secret", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"secret": "Du bist so a geile sau",
 		})
 	})
 
